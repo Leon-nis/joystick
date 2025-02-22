@@ -15,10 +15,10 @@ desenharForma renderer forma pos =
       y = fromIntegral (i * 100)           -- Coordenada y na tela
       centro = V2 (x + 50) (y + 50)        -- Centro da célula
       cor = case forma of                  -- Definir a cor de cada forma
-              X -> V4 255 0 0 255          -- Vermelho
-              T -> V4 255 255 0 255        -- Amarelo
-              Q -> V4 0 0 255 255          -- Azul
-              C -> V4 0 255 0 255          -- Verde
+              X -> V4 0 119 216 255        -- Azul PlayStation
+              T -> V4 0 206 107 255        -- Verde PlayStation
+              Q -> V4 255 10 178 255       -- Rosa PlayStation
+              C -> V4 255 23 23 255        -- Vermelho PlayStation
   in case forma of
        X -> do
          line renderer (V2 (x+20) (y+20)) (V2 (x+80) (y+80)) cor          -- Diagonal 1
