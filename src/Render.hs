@@ -6,6 +6,7 @@ import Control.Monad (unless)
 import Linear (V2(..), V4(..))
 import Forma (Forma(..))
 import Movimentacao (Grade, moverFormas)
+import Interacao (processarTeclas)
 
 -- Função para desenhar uma forma em uma posição específica
 desenharForma :: Renderer -> Forma -> V2 Int -> IO ()
@@ -34,16 +35,23 @@ appLoop renderer grade = do
   clear renderer
 
   -- Desenhar todas as formas na grade
-  mapM_ (\(i, row) -> mapM_ (\(j, forma) -> desenharForma renderer forma (V2 i j)) (zip [0..] row)) (zip [0..] grade)
+  mapM_ (\(i, row) ->
+          mapM_ (\(j, forma) ->
+                  desenharForma renderer forma (V2 i j))
+                (zip [0..] row))
+        (zip [0..] grade)
 
-  present renderer   -- Atualizar a tela
+  present renderer
+  -- Atualizar a tela
 
-  SDL.delay 400      -- Esperar 250ms
-
-  -- Mover as formas para a próxima posição
-  let novaGrade = moverFormas grade
+  SDL.delay 1000      -- Esperar 400ms
 
   -- Verificar se o usuário quer sair
   events <- pollEvents
-  let quit = any (\e -> case eventPayload e of SDL.QuitEvent -> True; _ -> False) events
-  unless quit $ appLoop renderer novaGrade  -- Continuar o loop se não houver saída
+  let gradeAposTeclas = processarTeclas events grade
+      novaGrade = moverFormas gradeAposTeclas
+      quit = any (\e -> case eventPayload e of 
+             SDL.QuitEvent -> True
+             _             -> False) events 
+  unless quit $ do 
+    appLoop renderer novaGrade  -- Continuar o loop se não houver saída	     
